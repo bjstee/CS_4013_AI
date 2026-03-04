@@ -1,0 +1,44 @@
+Benjamin Steele
+
+Q1.1:
+    My implementation of ReflexAgent improved pacman's win-rate reliably by implementing a good
+    evaluation function. This was done by 
+
+Q1.2:
+    My value function is as follows:
+    score = CurrentScore + \
+            (1 / closestFoodDist) + \
+            sumGhosts(
+                -> 10 / (ghostDist + 1) if ghost is scared
+                -> -100 if ghostDist < 3
+                -> -2 / (ghostDist + 1) otherwise
+            ) + \
+            -numFoodRemaining * 4 + \
+            -5 if action == STOP
+
+    We add 1/closestFoodDist to incentivise pacman to prefer a closer food pellet, subtract the numFoodRemaining
+    to incentivise choosing a state that results in fewer food (by eating), and we want to flee ghosts if they are
+    too close (I chose 3 as the flee distance as this felt right to me). If ghosts are scared, we want to chase
+    them, so incentivise as such, and otherwise, we generally want to avoid ghosts.
+
+    Didn't incentivise capsules because it didn't end up being necessary to pass the autograder, but it can be improved
+    to do this later.
+
+Q2.1:
+
+
+
+
+
+Q3.1:
+
+Q3.2
+
+
+
+Q4.1:
+
+
+Q5.1:
+
+

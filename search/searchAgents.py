@@ -388,7 +388,50 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
 
     "*** YOUR CODE HERE ***"
 
-    return 0 # Default to trivial solution
+    """
+    This code is separated into two parts. The first is unused code that was an attempt
+    at creating a more accurate heuristic function by computing the manhattan distance
+    to the nearest unvisited corner and adding that to the cross-corner distance,
+    multiplied by some factor based on the number of unvisited corners remaining. Although
+    the heuristic found a solution rather quickly, it was inconsistent through all tests
+    and tweaks and was eventually scrapped for the second heuristic, which was rather simply
+    the number of undiscovered corners remaining. 
+    """
+
+    ## get current position
+    x,y = state[0]
+
+    ## find unvisited corners
+    unvisited = set()
+    for i in range(1,4): # iterate over the booleans
+        if not state[i]:
+            unvisited.add(corners[i-1])
+
+    while(False):
+        ## find farthest corner from origin
+        xmax = 0
+        ymax = 0
+        for corner in corners:
+            if corner[0] > xmax and corner[1] > ymax:
+                xmax, ymax = corner[0], corner[1]
+
+        
+        ## find closest unvisited corner
+        nearest_unvisited = (0,0)
+        for corner in unvisited:
+            if abs(x - corner[0]) + abs(y - corner[1]) < abs(x - nearest_unvisited[0]) + abs(y - nearest_unvisited[1]):
+                nearest_unvisited = corner
+        
+        ## Manhattan distance: return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
+        manhattan_dist = abs(x - nearest_unvisited[0]) + abs(y - nearest_unvisited[1])
+
+        heuristic = 0
+        for corner in unvisited:
+            heuristic += abs(nearest_unvisited[0] - corner[0]) + abs(nearest_unvisited[1] - corner[1])
+
+    # lame heuristic -- return number of unvisited corners
+    heuristic = len(unvisited)
+    return heuristic
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -482,7 +525,8 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+
+    return len(foodGrid.asList())
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -513,6 +557,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
+        return search.bfs(problem)
         util.raiseNotDefined()
 
 class AnyFoodSearchProblem(PositionSearchProblem):
@@ -549,6 +594,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
+        return self.food[x][y]
         util.raiseNotDefined()
 
 def mazeDistance(point1: Tuple[int, int], point2: Tuple[int, int], gameState: pacman.GameState) -> int:

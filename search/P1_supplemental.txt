@@ -1,28 +1,80 @@
 Answer questions marked as "QS"
 
 QS1.1:
-
+    To implement a DFS, we use a stack. This is becuase the architecture
+    of a stack naturally complements the search function of a DFS. We expand
+    a deepest node first, and if we fail, we traverse back up to the previous level
+    and test the next deepest node. A stack makes this incredibly streamlined,
+    where traversing up the tree is as simple as popping the top of the stack.
 
 QS1.2:
-
+    The exploration order does follow what I would've expected. The algorithm
+    commits to going down a path until it hits a dead end and backtracks, and
+    this can be seen by the brighter color in the first dead ends compared to
+    the end of the path. Pacman does not go to all the explored squares, however,
+    as the deepest node has a path directly connected to the root of the tree,
+    no dead ends included.
 
 QS2.1:
-
+    To implement BFS, use a Queue. This is because we explore multiple paths at the
+    same time, traversing down the tree as we go. A queue naturally supports this
+    when we add the successors to each expanded node to the queue, since it is a FIFO
+    structure.
 
 QS3.1:
-
+    The cost function used is the total cumulative cost from the root to the current
+    node. Each move has a cost of 1, and because a lower number indicates a higher 
+    priority, the least cost path will automatically get queued first, meaning the
+    shortest path to the goal is guaranteed to be discovered
 
 
 QS4.1:
+    Both the null heuristic (which results in the same behavior as UCS) and the
+    manhattan heuristic find the optimal solition, however the manhattan heuristic is better
+    because it expands fewer search nodes. This is because the heuristic function allows
+    it to judge how close it is to the goal state and influence it's decision.
 
+Question 4.2:
+    In openMaze, nearly all empty spaces are explored in the null heuristic,
+    but the manhattan heuristic is slightly more efficient and ignores the bottom right
+    section of the maze
 
 QS5.1:
+    In this problem, the state is pacmans current position as well as four boolean variables
+    indicating whether its associated corner has been reached:
 
+        state = ((x, y), c0: boolean, c1: boolean, c2: boolean, c3: boolean)
 
 QS5.2:
+    My implementation is simple and straightforward. The getStartState method is described above,
+    however the other two methods are described below:
 
+    isGoalState() - get the current state information. If all booleans are True (meaning all corners
+    have been visited), then return true, otherwise return False
+
+    getSuccessors() - gets the child nodes by expanding the current node. For each direction, we test
+    to see if moving one unit in that direction results in a legal move. If so, we then check to see
+    if the next destination is a corner, and set the state flag accordingly. We group all of this into
+    the structure of our state space and append it to the successors list.
 
 QS6.1:
-
+    The heuristic function used for this problem was h(x) = U, where U is the number of unvisited
+    corners in the problem. The strong part of this heuristic is that it correctly accounts for
+    progress made in discovering states, reducing the expected cost accordingly. However, this
+    heuristic is definitely not as accurate as it could be. The lower bound is very general, and
+    will only ever be close to boards that approach 2x2 dimensions. 
+    
+    This heuristic is consistent, however. The heuristic for any node is always less than the heuristic
+    of a proceeding node plus the actual cost of that proceeding node.
+    
 
 QS7.1:
+    The heuristic used for this problem was the number of food dots remaining. This is a strong
+    heuristic because all the spaces with food need to be explored, so it serves as a lower bound that is
+    also quite tight, especially in early iterations. The heuristic gets a little
+    weaker as time progresses, however, and is not as close to the actual cost. This heuristic is
+    consistent, as they only ever decrease by 1 from state to state.
+
+QS8.1:
+    The solution I used was a breadth first search on the goal condition of where a state has food
+    at the location. 
