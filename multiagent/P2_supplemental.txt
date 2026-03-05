@@ -25,7 +25,10 @@ Q1.2:
     to do this later.
 
 Q2.1:
+    In my algorithm, I define a minimax function to be recursively called. It takes in the current state,
+    depth (iterating backwards), and the agent index as input.
 
+    It starts by checking if any of the states are terminal states. Otherwise, it gets all the legal actions
 
 
 

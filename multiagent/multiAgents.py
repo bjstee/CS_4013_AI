@@ -168,49 +168,49 @@ class MinimaxAgent(MultiAgentSearchAgent):
         """
         "*** YOUR CODE HERE ***"
 
-        action = None
+        def minimax(state, depth, agentIndex):
+            # Terminal conditions
+            if state.isWin() or state.isLose() or depth == 0:
+                return self.evaluationFunction(state)
 
-        # Go down the tree in a DFS manner, keeping track of the best action for Pacman at the root
+            legalActions = state.getLegalActions(agentIndex)
+            nextAgent = agentIndex + 1
+            if nextAgent == state.getNumAgents():
+                nextAgent = 0
+            nextDepth = depth - 1 if nextAgent == 0 else depth
 
-        # start at the root
-        def minimax(agentIndex, depth, gameState):
-            nonlocal action
-
-            # Check if we are at a terminal state (win/lose) or if we have reached the maximum depth
-            if gameState.isWin() or gameState.isLose() or depth == self.depth:
-                return self.evaluationFunction(gameState)
-
-            # Get legal actions for the current agent
-            legalActions = gameState.getLegalActions(agentIndex)
-
-            # If there are no legal actions, return the evaluation of the current state
-            if not legalActions:
-                return self.evaluationFunction(gameState)
-
-            # Initialize best score based on whether we are maximizing or minimizing
-            if agentIndex == 0:  # Pacman (maximizing agent)
+            # pacman wants to maximize the score
+            if agentIndex == 0:
                 bestScore = float('-inf')
                 for action in legalActions:
-                    successorState = gameState.generateSuccessor(agentIndex, action)
-                    score = minimax(1, depth, successorState)  # Move to the first ghost
+                    successor = state.generateSuccessor(agentIndex, action) 
+                    score = minimax(successor, nextDepth, nextAgent)
                     if score > bestScore:
                         bestScore = score
-                        if depth == 0:  # If we are at the root, update the best action
-                            action = action
-            else:  # Ghosts (minimizing agents)
+                return bestScore
+
+            # ghosts want to minimize the score
+            else:
                 bestScore = float('inf')
-                nextAgentIndex = (agentIndex + 1) % gameState.getNumAgents()
-                nextDepth = depth + 1 if nextAgentIndex == 0 else depth
                 for action in legalActions:
-                    successorState = gameState.generateSuccessor(agentIndex, action)
-                    score = minimax(nextAgentIndex, nextDepth, successorState)
+                    successor = state.generateSuccessor(agentIndex, action)
+                    score = minimax(successor, nextDepth, nextAgent)
                     if score < bestScore:
                         bestScore = score
-            return bestScore
+                return bestScore
 
-        minimax(0, 0, gameState)  # Start the minimax algorithm at the root     
+        # try every action pacman can take and pick the best one
+        bestAction = None
+        bestScore = float('-inf')
 
-        return action
+        for action in gameState.getLegalActions(0):
+            successor = gameState.generateSuccessor(0, action)
+            score = minimax(successor, self.depth, 1)
+            if score > bestScore:
+                bestScore = score
+                bestAction = action
+
+        return bestAction
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
