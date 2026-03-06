@@ -28,20 +28,33 @@ Q2.1:
     In my algorithm, I define a minimax function to be recursively called. It takes in the current state,
     depth (iterating backwards), and the agent index as input.
 
-    It starts by checking if any of the states are terminal states. Otherwise, it gets all the legal actions
+    In minimax, we explore all the way down each branch to either a terminal state or the max depth (as is
+    often the situation here) and get the utility. This is done by a recursive function call:
+    for each node in state tree:
+    - If the state is a terminal state, get the utility
+    - If the next agent is a max agent, find the max value from it's children
+        - minimax(successor, depth - 1, nextAgent)
+    - If the next agent is a min agent, find the min value from it's children
+        - minimax(successor, depth - 1, nextAgent)
 
-
-
+    Becuase we always start with a maximizing agent (pacman is agent 0), we start the call to the minimax function
+    by calling a for loop which gets each of the successors of the root state, and does a maximizing calculation on them.
 
 Q3.1:
-
+    AlphaBetaAgent values are identical to MinimaxAgent values, because the AlphaBetaAgent is just a pruned version of the
+    same tree as the MinimaxAgent. The only thing that is different in the structure of the two algorithms is how we track
+    the best max option (alpha) and the best min option (beta) throughout the search tree process.
 Q3.2
-
-
+    My strategy for breaking a tie is to keep the first discovered action which produces the best score. 
+    if score > bestScore:
+                bestScore = score
+                bestAction = action
 
 Q4.1:
+    My expectimax algorithm is very similar to the minimax algorithm, with the only change being that the minimizing agent
+    turns into an expected value agent that computes the average score of all the successors from the current state.
 
 
 Q5.1:
-
+    The evaluation function here is the same as my function in question 1.
 
